@@ -14,32 +14,32 @@ public class Interface {
         this.listaUppgifter= new ListaUppgifter();
         this.listaUtfordaUppgifter= new ListaUppgifter();
         this.reader = new Scanner(System.in);
-        this.skrivare = new WriteToFile("text", true);
+       // this.skrivare = new WriteToFile("text", true);
     }
 
     public void start() {
 
+        //lägger till några saker så det redan finns i listan. För att testa programmet.
+
         listaUppgifter.addUppgift(new Uppgifter("Städa", 3));
         listaUppgifter.addUppgift(new Uppgifter("Skura", 2));
         listaUppgifter.addUppgift(new Uppgifter("Spela", 5));
+
+        //lägger till en sak i utförda listan bara för att det ska finnas för testing.
         listaUtfordaUppgifter.addUppgift(new Uppgifter("Leka", 5));
 
         while (true) {
 
-            System.out.println("Vad vill du göra?" +
-                    " Du kan:\n" +
-                    "\n" +
+            System.out.println("Vad vill du göra? Du kan:\n" +
                     "1: Skriv ut uppgifter efter prioritering\n" +
                     "2: Lägg till uppgift\n" +
                     "3: Ta bort uppgift\n" +
                     "4: Se utförda uppgifter.\n" +
                     "5: Skriv ut listan i fil.\n" +
                     "6: Avsluta.");
-
             System.out.println();
 
-            String command = reader.next();
-
+            String command = reader.nextLine();
             if (command.equals("1")) {
                 // Skriver ut datumet listan genereras
                 System.out.println("Uppgifter den: "+LocalDate.now());
@@ -61,34 +61,29 @@ public class Interface {
                 }
 
             } else if (command.equals("5")){
-                for (Uppgifter x : listaUppgifter.getListaUppgifter()) {
-                   // Nedan skriver ut listan till filen Text
-                    try {
-                        skrivare.writeToFile(x.toString());
-                    }
-                    catch (IOException e){
-                        System.out.println("Fungerade inte");
-                    }
-                }
+                skrivUtTillFil();
 
             } else if (command.equals("6")){
                     break;
-                }
+            }else if (command.equals("7")){ // Vill få den att läsa en fil.
+                ReadFile readFile = new ReadFile();
+                readFile.readFile();
+             }
             }
         }
 
 // frågar användaren efter namn och prioritering, sen lägger till det i lisan.
     public void addUppgift(){
         System.out.println("Vad är det för uppgift?");
-        String name  = reader.next();
+        String name  = reader.nextLine();
         System.out.println("Vad är det för prioritering?");
         int prioritering = Integer.parseInt(reader.next());
         this.listaUppgifter.addUppgift(new Uppgifter(name,prioritering));
         System.out.println();
     }
 
-    // frågar användaren efter uppgift och tar sedan bort den ur listan.
-    public void taBortUppgift(){
+    // frågar användaren efter uppgift och tar sedan bort den ur listan. Lägger sedan till i utförda uppgifter.
+     public void taBortUppgift(){
         System.out.println("Vad är det för uppgift som ska tas bort?");
         String name = reader.next();
 
@@ -107,5 +102,22 @@ public class Interface {
                  break;
              }
          }
+    }
+    // skriver listan till en fil med dagens datum
+
+    public void skrivUtTillFil(){
+        String datum = LocalDate.now().toString();
+        skrivare = new WriteToFile("Lista den " + datum, true);
+
+        for (Uppgifter x : listaUppgifter.getListaUppgifter()) {
+            // Nedan skriver ut listan till filen Text
+            try {
+                skrivare.writeToFile(x.toString());
+            }
+            catch (IOException e){
+                System.out.println("Fungerade inte");
+            }
+        }
+
     }
 }

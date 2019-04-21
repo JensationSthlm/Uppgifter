@@ -2,9 +2,11 @@ public class Uppgifter implements Comparable<Uppgifter> {
 
     private String name;
     // prioritering måste vara heltal mellan 0-5.
+    // 1 är högsta prioritet.
     private int prioritering;
     // tidsåtgång i hela minuter.
     private int tidsÅtgång;
+    private String plats;
 
 
     public Uppgifter(String name, int prioritering){
@@ -48,7 +50,7 @@ public class Uppgifter implements Comparable<Uppgifter> {
     }
 
     public int compareTo(Uppgifter uppgift){
-        return uppgift.prioritering-this.prioritering;
+        return this.prioritering-uppgift.prioritering;
     }
 
     @Override
